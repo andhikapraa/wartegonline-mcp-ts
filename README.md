@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/andhikapraa-wartegonline-mcp-ts-badge.png)](https://mseep.ai/app/andhikapraa-wartegonline-mcp-ts)
+
 # Basic MCP Server
 
 A minimal Model Context Protocol (MCP) server demonstrating tools, resources, and prompts.
