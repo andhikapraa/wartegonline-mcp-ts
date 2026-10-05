@@ -10,6 +10,17 @@ const BASE_URL = "https://customer.warloncatering.com";
 // Jakarta timezone offset (UTC+7)
 const JAKARTA_TZ_OFFSET = 7 * 60; // minutes
 
+// Helper to format date in Jakarta timezone as YYYY-MM-DD
+function formatDateJakarta(date: Date): string {
+  const formatter = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Jakarta",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  return formatter.format(date);
+}
+
 export interface OrderGroup {
   id: number;
   scheduleId: number;
@@ -235,7 +246,8 @@ export class WarlonClient {
   ): Promise<boolean> {
     this.checkAuth();
 
-    const dateStr = newDate.toISOString().split("T")[0];
+    // Format date in Jakarta timezone to avoid off-by-one day errors
+    const dateStr = formatDateJakarta(newDate);
     const defaultTime =
       orderType === "LUNCH" ? "12:00 - 13:00" : "18:00 - 19:00";
 
@@ -307,7 +319,7 @@ export class WarlonClient {
     const dayMapping = new Map<string, Date>();
 
     for (const group of groupsToReschedule) {
-      const oldDateStr = group.scheduledDate.toISOString().split("T")[0];
+      const oldDateStr = formatDateJakarta(group.scheduledDate);
 
       if (!dayMapping.has(oldDateStr)) {
         // Skip Sundays
@@ -338,7 +350,7 @@ export class WarlonClient {
         results.rescheduled.push({
           groupId: group.id,
           oldDate: oldDateStr,
-          newDate: newDate.toISOString().split("T")[0],
+          newDate: formatDateJakarta(newDate),
         });
       } else {
         results.failedCount++;

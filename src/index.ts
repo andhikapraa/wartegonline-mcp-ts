@@ -40,11 +40,21 @@ function parseDate(dateStr: string): Date {
 }
 
 function formatDate(date: Date): string {
-  return date.toISOString().split("T")[0];
+  // Format in Jakarta timezone to avoid UTC conversion issues
+  const formatter = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Jakarta",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  return formatter.format(date);
 }
 
 function getDayName(date: Date): string {
-  return date.toLocaleDateString("en-US", { weekday: "long" });
+  return date.toLocaleDateString("en-US", {
+    weekday: "long",
+    timeZone: "Asia/Jakarta"
+  });
 }
 
 export default function createServer({
